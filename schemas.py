@@ -13,3 +13,16 @@ class JDAnalysis(BaseModel):
     required_skills: list[str]
     experience_required: float
     responsibilities: list[str]
+    
+class MatchAnalysis(BaseModel):
+    matching_skills: list[str]
+    missing_skills: list[str]
+    experience_match: bool
+    
+class FinalReport(BaseModel):
+    matching_skills: list[str]
+    missing_skills: list[str]
+    experience_match: bool
+    strengths: list[str]
+    gaps: list[str]
+    recommendations: list[str]
