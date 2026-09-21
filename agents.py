@@ -1,5 +1,5 @@
 from langchain_google_genai import ChatGoogleGenerativeAI
-from schemas import ResumeAnalysis, JDAnalysis ,MatchAnalysis, FinalReport
+from schemas import ResumeAnalysis, JDAnalysis ,MatchAnalysis, FinalReport , ValidationResult
 from dotenv import load_dotenv
 import os
 from tools import compare_skills
@@ -90,3 +90,55 @@ def matching_agent(state):
     }
 
 report_llm = llm.with_structured_output(FinalReport)
+
+def report_agent(state):
+
+    result = report_llm.invoke(
+        f"""
+        Create a resume-job analysis report.
+
+        Resume Analysis:
+        {state["resume_analysis"]}
+
+        Job Description Analysis:
+        {state["jd_analysis"]}
+
+        Match Analysis:
+        {state["match_analysis"]}
+        """
+    )
+
+    return {
+        "final_report": result
+    }
+    
+
+
+validator_llm = llm.with_structured_output(ValidationResult)
+
+def validator(state):
+
+    result = validator_llm.invoke(
+        f"""
+        Validate this final report.
+
+        Check:
+        - required fields are present
+        - matching skills are consistent
+        - missing skills are consistent
+        - report is logically consistent
+
+        Report:
+        {state["final_report"]}
+        """
+    )
+
+    return {
+        "validation": result
+    }
+def check_validation(state):
+
+    if state["validation"].valid:
+        return "valid"
+
+    return "invalid"

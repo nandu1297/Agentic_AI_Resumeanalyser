@@ -26,3 +26,7 @@ class FinalReport(BaseModel):
     strengths: list[str]
     gaps: list[str]
     recommendations: list[str]
+    
+class ValidationResult(BaseModel):
+    valid: bool
+    issues: list[str]

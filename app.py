@@ -1,6 +1,7 @@
 from fastapi import FastAPI,UploadFile, File, Form
 import fitz
 from typing import TypedDict
+from graph import app as agent_graph
 
 app = FastAPI()
 
@@ -41,6 +42,10 @@ async def analyze(resume: UploadFile = File(...),job_description: str = Form(...
         "resume_text": resume_txt,
         "jd_text": jd_text
     }
+    
+    result = agent_graph.invoke(initial_state)
 
-    # Temporary: return the state so we can test it
-    return initial_state
+    # Return final report
+    return {
+        "report": result["final_report"]
+    }
