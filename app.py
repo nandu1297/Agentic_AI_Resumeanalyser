@@ -1,8 +1,8 @@
-from fastapi import FastApi,UploadFile, File, Form
+from fastapi import FastAPI,UploadFile, File, Form
 import fitz
 from typing import TypedDict
 
-app = FastApi()
+app = FastAPI()
 
 
 # State that LangGraph will use later
