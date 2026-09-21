@@ -35,7 +35,7 @@ def resume_agent(state):
         "resume_analysis": result
     }
 
-def jd_agent(state)
+def jd_agent(state) :
     
     result = jd_llm.invoke(f"""
         Analyze this job description.

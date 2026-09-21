@@ -1,4 +1,5 @@
 from fastapi import FastAPI,UploadFile, File, Form
+from fastapi.responses import JSONResponse
 import fitz
 from typing import TypedDict
 from graph import app as agent_graph
@@ -43,7 +44,13 @@ async def analyze(resume: UploadFile = File(...),job_description: str = Form(...
         "jd_text": jd_text
     }
     
-    result = agent_graph.invoke(initial_state)
+    try:
+        result = agent_graph.invoke(initial_state)
+    except Exception:
+        return JSONResponse(
+            status_code=503,
+            content={"detail": "Analysis is temporarily unavailable. Please try again in a moment."}
+        )
 
     # Return final report
     return {
